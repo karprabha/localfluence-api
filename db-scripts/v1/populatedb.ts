@@ -17,7 +17,7 @@ async function userCreate(
     family_name: string,
     username: string,
     original_password: string,
-    membership_status: string,
+    role: string,
 ) {
     const password = await bcrypt.hash(original_password, 10);
     const user = new User({
@@ -25,7 +25,7 @@ async function userCreate(
         family_name,
         username,
         password,
-        membership_status,
+        role,
     });
 
     await user.save();
