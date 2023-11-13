@@ -5,7 +5,11 @@
     "author": "Prabhakar Yadav",
     "scripts": {
         "start": "bun ./bin/www",
-        "dev": "DEBUG=localfluence-api:* && bun --hot ./bin/www",
+        "db:dev:rm": "docker compose rm dev-db -s -f -v",
+        "db:dev:up": "docker compose up dev-db -d",
+        "db:dev:populate": "bun db-scripts/v1/populatedb.ts mongodb://localhost:27017/localfluence-api",
+        "db:dev:restart": "bun run db:dev:rm && bun run db:dev:up && sleep 1 && bun run db:dev:populate",
+        "dev": "bun run db:dev:restart && sleep 1 && DEBUG=localfluence-api:* && bun --hot ./bin/www",
         "architecture": "depcruise --include-only \"^src\" --output-type dot src | dot -T svg > dependencygraph.svg"
     },
     "devDependencies": {
