@@ -5,6 +5,7 @@ import createError from "http-errors";
 import { ErrorRequestHandler } from "express";
 
 import databaseConfig from "../config/database.config";
+import v1Router from "./api/v1/routes";
 
 const app = express();
 
@@ -17,12 +18,15 @@ try {
     console.log("Connected to MongoDB");
 } catch (err) {
     console.error("MongoDB connection error:", err);
+    process.exit(1);
 }
 
 app.use(logger(process.env.MORGAN_LOG_FORMAT || "dev"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/api/v1", v1Router);
 
 app.use((req, res, next) => {
     next(createError(404));
